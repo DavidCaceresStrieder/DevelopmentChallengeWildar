@@ -1,6 +1,8 @@
 ﻿using DevelopmentChallenge.Data.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 
 
 namespace DevelopmentChallenge.Data.Classes.Lenguajes
@@ -22,10 +24,17 @@ namespace DevelopmentChallenge.Data.Classes.Lenguajes
 
         public string GetShapeName(GeometricDataResume geometricDataResume)
         {
-            return this.ShapeNames
-                .Where(x => x.ShapeEnum == geometricDataResume.shapeEnum)
-                .Select(x => geometricDataResume.Count == 1 ? x.SingleNameLabel : x.MultipleNameLabel)
-                .SingleOrDefault();
+            try
+            {
+                return this.ShapeNames
+                    .Where(x => x.ShapeEnum == geometricDataResume.shapeEnum)
+                    .Select(x => geometricDataResume.Count == 1 ? x.SingleNameLabel : x.MultipleNameLabel)
+                    .Single();
+            }
+            catch (ArgumentNullException e)
+            {
+                throw new Exception("Shape name not added on " + LenguageEnum.ToString() + " lenguage", e);
+            }
         }
 
 
